@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">OfflineBudgetTracker</string>
+    <string name="test_splash_text">Splash!!</string>
+    <string name="app_title_splash_screen">Offline Budget Tracker</string>
+</resources>
