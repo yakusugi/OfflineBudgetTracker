@@ -27,7 +27,6 @@
         android:text="@string/app_title_splash_screen"
         android:textColor="@color/black"
         android:textSize="30dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
