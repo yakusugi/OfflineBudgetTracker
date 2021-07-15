@@ -3,6 +3,7 @@ package com.example.offlinebudgettracker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +16,11 @@ import com.example.offlinebudgettracker.model.BudgetTrackerViewModel;
 
 public class NewBudgetEntry extends AppCompatActivity {
 
+    public static final String DATE_REPLY = "date_reply";
+    public static final String STORE_NAME_REPLY = "store_name_reply";
+    public static final String PRODUCT_NAME_REPLY = "product_name_reply";
+    public static final String PRODUCT_TYPE_REPLY = "product_type_reply";
+    public static final String PRICE_REPLY = "price_reply";
     private EditText enterDate;
     private EditText enterStoreName;
     private EditText enterProductName;
@@ -40,22 +46,31 @@ public class NewBudgetEntry extends AppCompatActivity {
                 .create(BudgetTrackerViewModel.class);
 
         saveIntoButton.setOnClickListener(v -> {
+            Intent replyIntent = new Intent();
 
             if (!TextUtils.isEmpty(enterDate.getText())
                 && !TextUtils.isEmpty(enterStoreName.getText())
                 && !TextUtils.isEmpty(enterProductName.getText())
                 && !TextUtils.isEmpty(enterProductType.getText())
                 && !TextUtils.isEmpty(enterPrice.getText())) {
-                    BudgetTrackerDto budgetTrackerDto = new BudgetTrackerDto(
-                            enterDate.getText().toString(),
-                            enterStoreName.getText().toString(),
-                            enterProductName.getText().toString(),
-                            enterProductType.getText().toString(),
-                            Integer.parseInt(enterPrice.getText().toString()));
-                    BudgetTrackerViewModel.insert(budgetTrackerDto);
+                String date = enterDate.getText().toString();
+                String storeName = enterStoreName.getText().toString();
+                String productName = enterProductName.getText().toString();
+                String productType = enterProductType.getText().toString();
+                int price = Integer.parseInt(enterPrice.getText().toString());
+
+                replyIntent.putExtra(DATE_REPLY, date);
+                replyIntent.putExtra(STORE_NAME_REPLY, storeName);
+                replyIntent.putExtra(PRODUCT_NAME_REPLY, productName);
+                replyIntent.putExtra(PRODUCT_TYPE_REPLY, productType);
+                replyIntent.putExtra(PRICE_REPLY, String.valueOf(price));
+                setResult(RESULT_OK, replyIntent);
+
+
             } else {
-                Toast.makeText(this, R.string.empty, Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED, replyIntent);
             }
+            finish();
 
         });
     }

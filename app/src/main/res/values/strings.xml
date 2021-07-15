@@ -10,4 +10,5 @@
     <string name="price_hint">Enter price</string>
     <string name="save_text">Save</string>
     <string name="empty">Enter intomation</string>
+    <string name="description_text">Plus Button Icon</string>
 </resources>
