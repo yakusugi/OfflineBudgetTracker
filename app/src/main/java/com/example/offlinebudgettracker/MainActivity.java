@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.textSample);
 
         budgetTrackerViewModel = new ViewModelProvider.AndroidViewModelFactory(MainActivity.this
                 .getApplication())
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 builder.append(" - ").append(budgetTrackerDto.getDate()).append(" ").append(budgetTrackerDto.getProductName());
                 Log.d("TAG", "onCreate: " + budgetTrackerDto.getProductName());
             }
-            textView.setText(builder.toString());
 
         });
 
