@@ -2,8 +2,11 @@ package com.example.offlinebudgettracker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.offlinebudgettracker.adapter.RecycleViewAdapter;
 import com.example.offlinebudgettracker.model.BudgetTrackerDto;
 import com.example.offlinebudgettracker.model.BudgetTrackerViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,24 +26,29 @@ public class MainActivity extends AppCompatActivity {
     private static final int NEW_BUDGET_ENTRY_ACTIVITY_REQUEST_CODE = 1;
     private BudgetTrackerViewModel budgetTrackerViewModel;
     private TextView textView;
+    private RecyclerView recyclerView;
+    private RecycleViewAdapter recycleViewAdapter;
+    private LiveData<List<BudgetTrackerDto>> budgetTrackerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        recyclerView = findViewById(R.id.recycle_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         budgetTrackerViewModel = new ViewModelProvider.AndroidViewModelFactory(MainActivity.this
                 .getApplication())
                 .create(BudgetTrackerViewModel.class);
 
         budgetTrackerViewModel.getAllBudgetTrackingContents().observe(this, budgetTrackerDtos -> {
-            StringBuilder builder = new StringBuilder();
-            for (BudgetTrackerDto budgetTrackerDto : budgetTrackerDtos) {
-                builder.append(" - ").append(budgetTrackerDto.getDate()).append(" ").append(budgetTrackerDto.getProductName());
-                Log.d("TAG", "onCreate: " + budgetTrackerDto.getProductName());
-            }
-
+            recycleViewAdapter = new RecycleViewAdapter(budgetTrackerDtos, MainActivity.this);
+            recyclerView.setAdapter(recycleViewAdapter);
         });
+
+
 
         FloatingActionButton fab = findViewById(R.id.add_budget_info_fab);
         fab.setOnClickListener(v -> {

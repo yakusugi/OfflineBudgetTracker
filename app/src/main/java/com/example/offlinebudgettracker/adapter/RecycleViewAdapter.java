@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
-    private LiveData<List<BudgetTrackerDto>> budgetTrackerList;
+    private List<BudgetTrackerDto> budgetTrackerList;
     private Context context;
 
-    public RecycleViewAdapter(LiveData<List<BudgetTrackerDto>> budgetTrackerList, Context context) {
+    public RecycleViewAdapter(List<BudgetTrackerDto> budgetTrackerList, Context context) {
         this.budgetTrackerList = budgetTrackerList;
         this.context = context;
     }
@@ -35,17 +35,17 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BudgetTrackerDto budgetTrackerDto = Objects.requireNonNull(budgetTrackerList.getValue()).get(position);
+        BudgetTrackerDto budgetTrackerDto = Objects.requireNonNull(budgetTrackerList.get(position));
         holder.date.setText(budgetTrackerDto.getDate());
         holder.storeName.setText(budgetTrackerDto.getStoreName());
         holder.productName.setText(budgetTrackerDto.getProductName());
         holder.productType.setText(budgetTrackerDto.getProductType());
-        holder.price.setText(budgetTrackerDto.getProductType());
+        holder.price.setText(String.valueOf(budgetTrackerDto.getPrice()));
     }
 
     @Override
     public int getItemCount() {
-        return Objects.requireNonNull(budgetTrackerList.getValue()).size();
+        return Objects.requireNonNull(budgetTrackerList.size());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
