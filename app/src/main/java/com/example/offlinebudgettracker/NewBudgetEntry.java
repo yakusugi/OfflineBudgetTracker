@@ -1,6 +1,7 @@
 package com.example.offlinebudgettracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -73,5 +74,17 @@ public class NewBudgetEntry extends AppCompatActivity {
             finish();
 
         });
+
+        Bundle data = getIntent().getExtras();
+        if (data != null) {
+            int id = data.getInt(MainActivity.BUDGET_TRACKER_ID);
+            budgetTrackerViewModel.get(id).observe(this, budgetTrackerDto -> {
+                enterDate.setText(budgetTrackerDto.getDate());
+                enterStoreName.setText(budgetTrackerDto.getStoreName());
+                enterProductName.setText(budgetTrackerDto.getProductName());
+                enterProductType.setText(budgetTrackerDto.getProductType());
+                enterPrice.setText(String.valueOf(budgetTrackerDto.getPrice()));
+            });
+        }
     }
 }

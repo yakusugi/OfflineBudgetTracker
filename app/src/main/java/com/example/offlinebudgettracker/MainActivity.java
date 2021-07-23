@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
 
     private static final int NEW_BUDGET_ENTRY_ACTIVITY_REQUEST_CODE = 1;
     private static final String TAG = "Clicked";
+    public static final String BUDGET_TRACKER_ID = "budget_tracker_id";
     private BudgetTrackerViewModel budgetTrackerViewModel;
     private TextView textView;
     private RecyclerView recyclerView;
@@ -84,7 +85,9 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
     @Override
     public void onBudgetTrackerClick(int position) {
         BudgetTrackerDto budgetTrackerDto = Objects.requireNonNull(budgetTrackerViewModel.allBudgetInfoContents.getValue().get(position));
-        Log.d(TAG, "onBudgetTrackerClick: " + position + budgetTrackerDto.getProductName());
-//        startActivity(new Intent(MainActivity.this, NewBudgetEntry.class));
+        Log.d(TAG, "onBudgetTrackerClick: " + position + budgetTrackerDto.getId());
+        Intent intent = new Intent(MainActivity.this, NewBudgetEntry.class);
+        intent.putExtra(BUDGET_TRACKER_ID, budgetTrackerDto.getId());
+        startActivity(intent);
     }
 }
