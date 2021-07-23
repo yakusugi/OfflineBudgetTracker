@@ -20,10 +20,12 @@ import com.example.offlinebudgettracker.model.BudgetTrackerViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecycleViewAdapter.OnBudgetTrackerClickListener {
 
     private static final int NEW_BUDGET_ENTRY_ACTIVITY_REQUEST_CODE = 1;
+    private static final String TAG = "Clicked";
     private BudgetTrackerViewModel budgetTrackerViewModel;
     private TextView textView;
     private RecyclerView recyclerView;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 .create(BudgetTrackerViewModel.class);
 
         budgetTrackerViewModel.getAllBudgetTrackingContents().observe(this, budgetTrackerDtos -> {
-            recycleViewAdapter = new RecycleViewAdapter(budgetTrackerDtos, MainActivity.this);
+            recycleViewAdapter = new RecycleViewAdapter(budgetTrackerDtos, MainActivity.this, this);
             recyclerView.setAdapter(recycleViewAdapter);
         });
 
@@ -77,5 +79,12 @@ public class MainActivity extends AppCompatActivity {
             BudgetTrackerViewModel.insert(budgetTrackerDto);
 
         }
+    }
+
+    @Override
+    public void onBudgetTrackerClick(int position) {
+        BudgetTrackerDto budgetTrackerDto = Objects.requireNonNull(budgetTrackerViewModel.allBudgetInfoContents.getValue().get(position));
+        Log.d(TAG, "onBudgetTrackerClick: " + position + budgetTrackerDto.getProductName());
+//        startActivity(new Intent(MainActivity.this, NewBudgetEntry.class));
     }
 }
