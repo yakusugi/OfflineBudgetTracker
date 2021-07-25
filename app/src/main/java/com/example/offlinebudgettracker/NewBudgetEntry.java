@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.offlinebudgettracker.model.BudgetTrackerDto;
 import com.example.offlinebudgettracker.model.BudgetTrackerViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 public class NewBudgetEntry extends AppCompatActivity {
 
@@ -27,7 +28,11 @@ public class NewBudgetEntry extends AppCompatActivity {
     private EditText enterProductName;
     private EditText enterProductType;
     private EditText enterPrice;
-    private Button saveIntoButton;
+    private Button saveInfoButton;
+    private int budgetItemId = 0;
+    private Boolean isEdit = false;
+    private Button updateButton;
+    private Button deleteButton;
 
     private BudgetTrackerViewModel budgetTrackerViewModel;
 
@@ -40,13 +45,28 @@ public class NewBudgetEntry extends AppCompatActivity {
         enterProductName = findViewById(R.id.enter_product_name);
         enterProductType = findViewById(R.id.enter_product_type);
         enterPrice = findViewById(R.id.enter_price);
-        saveIntoButton = findViewById(R.id.save_button);
+        saveInfoButton = findViewById(R.id.save_button);
 
         budgetTrackerViewModel = new ViewModelProvider.AndroidViewModelFactory(NewBudgetEntry.this
                 .getApplication())
                 .create(BudgetTrackerViewModel.class);
 
-        saveIntoButton.setOnClickListener(v -> {
+
+        if (getIntent().hasExtra(MainActivity.BUDGET_TRACKER_ID)) {
+            budgetItemId = getIntent().getIntExtra(MainActivity.BUDGET_TRACKER_ID, 0);
+            budgetTrackerViewModel.get(budgetItemId).observe(this, budgetTrackerDto -> {
+                if (budgetTrackerDto != null) {
+                    enterDate.setText(budgetTrackerDto.getDate());
+                    enterStoreName.setText(budgetTrackerDto.getStoreName());
+                    enterProductName.setText(budgetTrackerDto.getProductName());
+                    enterProductType.setText(budgetTrackerDto.getProductType());
+                    enterPrice.setText(String.valueOf(budgetTrackerDto.getPrice()));
+                }
+            });
+            isEdit = true;
+        }
+
+        saveInfoButton.setOnClickListener(v -> {
             Intent replyIntent = new Intent();
 
             if (!TextUtils.isEmpty(enterDate.getText())
@@ -75,16 +95,71 @@ public class NewBudgetEntry extends AppCompatActivity {
 
         });
 
-        Bundle data = getIntent().getExtras();
-        if (data != null) {
-            int id = data.getInt(MainActivity.BUDGET_TRACKER_ID);
-            budgetTrackerViewModel.get(id).observe(this, budgetTrackerDto -> {
-                enterDate.setText(budgetTrackerDto.getDate());
-                enterStoreName.setText(budgetTrackerDto.getStoreName());
-                enterProductName.setText(budgetTrackerDto.getProductName());
-                enterProductType.setText(budgetTrackerDto.getProductType());
-                enterPrice.setText(String.valueOf(budgetTrackerDto.getPrice()));
-            });
+        //Delete button
+        deleteButton = findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(v -> {
+            String date = enterDate.getText().toString().trim();
+            String storeName = enterStoreName.getText().toString().trim();
+            String productName = enterProductName.getText().toString().trim();
+            String productType = enterProductType.getText().toString().trim();
+            int price = Integer.parseInt(enterPrice.getText().toString().trim());
+
+            if (TextUtils.isEmpty(date) ||
+                    TextUtils.isEmpty(storeName) ||
+                    TextUtils.isEmpty(productName) ||
+                    TextUtils.isEmpty(productType) ||
+                    TextUtils.isEmpty(String.valueOf(price))) {
+                Snackbar.make(enterProductName, R.string.empty, Snackbar.LENGTH_SHORT).show();
+            } else {
+                BudgetTrackerDto budgetTrackerDto = new BudgetTrackerDto();
+                budgetTrackerDto.setId(budgetItemId);
+                budgetTrackerDto.setDate(date);
+                budgetTrackerDto.setStoreName(storeName);
+                budgetTrackerDto.setProductName(productName);
+                budgetTrackerDto.setProductType(productType);
+                budgetTrackerDto.setPrice(price);
+                BudgetTrackerViewModel.delete(budgetTrackerDto);
+                finish();
+            }
+
+        });
+
+        //Update button
+        updateButton = findViewById(R.id.update_button);
+        updateButton.setOnClickListener(v -> {
+
+            String date = enterDate.getText().toString().trim();
+            String storeName = enterStoreName.getText().toString().trim();
+            String productName = enterProductName.getText().toString().trim();
+            String productType = enterProductType.getText().toString().trim();
+            int price = Integer.parseInt(enterPrice.getText().toString().trim());
+
+            if (TextUtils.isEmpty(date) ||
+                    TextUtils.isEmpty(storeName) ||
+                    TextUtils.isEmpty(productName) ||
+                    TextUtils.isEmpty(productType) ||
+                    TextUtils.isEmpty(String.valueOf(price))) {
+                Snackbar.make(enterProductName, R.string.empty, Snackbar.LENGTH_SHORT).show();
+            } else {
+                BudgetTrackerDto budgetTrackerDto = new BudgetTrackerDto();
+                budgetTrackerDto.setId(budgetItemId);
+                budgetTrackerDto.setDate(date);
+                budgetTrackerDto.setStoreName(storeName);
+                budgetTrackerDto.setProductName(productName);
+                budgetTrackerDto.setProductType(productType);
+                budgetTrackerDto.setPrice(price);
+                BudgetTrackerViewModel.update(budgetTrackerDto);
+                finish();
+            }
+        });
+
+        if (isEdit) {
+            saveInfoButton.setVisibility(View.GONE);
+        } else {
+            updateButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
         }
+
+
     }
 }
