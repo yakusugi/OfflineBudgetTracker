@@ -13,4 +13,11 @@
     <string name="description_text">Plus Button Icon</string>
     <string name="update_text">Update</string>
     <string name="delete_text">Delete</string>
+    <string name="storeNameButton">Store</string>
+    <string name="product_name_serch_button">Product</string>
+    <string name="date_search_button">Date</string>
+    <string name="price_search_button">Price</string>
+    <string name="store_name_query_banner">Store Name Query</string>
+    <string name="stote_name_query_hint">Enter a store name</string>
+    <string name="store_name_query_button_text">Query</string>
 </resources>

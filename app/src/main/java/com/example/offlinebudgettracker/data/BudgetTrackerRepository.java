@@ -12,16 +12,21 @@ import java.util.List;
 public class BudgetTrackerRepository {
     private BudgetTrackerDao budgetTrackerDao;
     private LiveData<List<BudgetTrackerDto>> allBudgetInfoContent;
+    private LiveData<List<BudgetTrackerDto>> storeNameBudgetInfoContent;
+    String query = null;
 
     public BudgetTrackerRepository(Application application) {
         BudgetTrackerRoomDatabase db = BudgetTrackerRoomDatabase.getDatabase(application);
             budgetTrackerDao = db.budgetTrackerDao();
 
             allBudgetInfoContent = budgetTrackerDao.getAllBudgetTrackerInfo();
-
-
+            storeNameBudgetInfoContent = budgetTrackerDao.getAllBudgetTrackerStoreName(query);
     }
+
     public LiveData<List<BudgetTrackerDto>> getAllBudgetData() {return allBudgetInfoContent;}
+
+    public LiveData<List<BudgetTrackerDto>> storeNameBudgetData(String storeName) {return storeNameBudgetInfoContent;}
+
     public void insert(BudgetTrackerDto budgetTrackerDto) {
         BudgetTrackerRoomDatabase.dataWritableExecutor.execute(() -> {
             budgetTrackerDao.insert(budgetTrackerDto);

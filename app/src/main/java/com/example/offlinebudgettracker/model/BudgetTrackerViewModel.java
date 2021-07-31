@@ -14,14 +14,22 @@ public class BudgetTrackerViewModel extends AndroidViewModel {
 
     public static BudgetTrackerRepository repository;
     public final LiveData<List<BudgetTrackerDto>> allBudgetInfoContents;
+    public final LiveData<List<BudgetTrackerDto>> storeNameBudgetInfoContents;
+
 
     public BudgetTrackerViewModel(@NonNull Application application) {
         super(application);
         repository = new BudgetTrackerRepository(application);
         allBudgetInfoContents = repository.getAllBudgetData();
+
+        String query = null;
+        storeNameBudgetInfoContents = repository.storeNameBudgetData(query);
     }
 
+
     public LiveData<List<BudgetTrackerDto>> getAllBudgetTrackingContents() {return allBudgetInfoContents;}
+    public LiveData<List<BudgetTrackerDto>> getStoreNameBudgetTrackingContents() {return storeNameBudgetInfoContents;}
+
     public static void insert(BudgetTrackerDto budgetTrackerDto) {repository.insert(budgetTrackerDto);}
 
     public LiveData<BudgetTrackerDto> get(int id) {return repository.get(id);}

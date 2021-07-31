@@ -86,8 +86,6 @@ public class NewBudgetEntry extends AppCompatActivity {
                 replyIntent.putExtra(PRODUCT_TYPE_REPLY, productType);
                 replyIntent.putExtra(PRICE_REPLY, String.valueOf(price));
                 setResult(RESULT_OK, replyIntent);
-
-
             } else {
                 setResult(RESULT_CANCELED, replyIntent);
             }

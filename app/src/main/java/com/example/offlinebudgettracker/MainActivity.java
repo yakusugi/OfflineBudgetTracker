@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.offlinebudgettracker.adapter.RecycleViewAdapter;
@@ -49,13 +50,19 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
         budgetTrackerViewModel.getAllBudgetTrackingContents().observe(this, budgetTrackerDtos -> {
             recycleViewAdapter = new RecycleViewAdapter(budgetTrackerDtos, MainActivity.this, this);
             recyclerView.setAdapter(recycleViewAdapter);
+
+
         });
-
-
 
         FloatingActionButton fab = findViewById(R.id.add_budget_info_fab);
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, NewBudgetEntry.class);
+            startActivityForResult(intent, NEW_BUDGET_ENTRY_ACTIVITY_REQUEST_CODE);
+        });
+
+        Button storeNameQueryBtn = findViewById(R.id.storeNameQueryButton);
+        storeNameQueryBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, StoreNameQuery.class);
             startActivityForResult(intent, NEW_BUDGET_ENTRY_ACTIVITY_REQUEST_CODE);
         });
     }
