@@ -25,7 +25,9 @@ public class BudgetTrackerRepository {
 
     public LiveData<List<BudgetTrackerDto>> getAllBudgetData() {return allBudgetInfoContent;}
 
-    public LiveData<List<BudgetTrackerDto>> storeNameBudgetData(String storeName) {return storeNameBudgetInfoContent;}
+    public LiveData<List<BudgetTrackerDto>> getStoreNameBudgetData(String storeName) {
+        return this.budgetTrackerDao.getAllBudgetTrackerStoreName(storeName);
+    }
 
     public void insert(BudgetTrackerDto budgetTrackerDto) {
         BudgetTrackerRoomDatabase.dataWritableExecutor.execute(() -> {

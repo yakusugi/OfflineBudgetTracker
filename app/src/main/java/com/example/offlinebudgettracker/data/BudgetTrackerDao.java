@@ -24,8 +24,8 @@ public interface BudgetTrackerDao {
     @Query("SELECT * FROM budget_tracker_table ORDER BY date ASC")
     LiveData<List<BudgetTrackerDto>> getAllBudgetTrackerInfo();
 
-    @Query("SELECT * FROM budget_tracker_table WHERE storeName = :query")
-    LiveData<List<BudgetTrackerDto>> getAllBudgetTrackerStoreName(String query);
+    @Query("SELECT * FROM budget_tracker_table WHERE storeName = :storeQuery")
+    LiveData<List<BudgetTrackerDto>> getAllBudgetTrackerStoreName(String storeQuery);
 
     @Query("SELECT * FROM budget_tracker_table WHERE budget_tracker_table.id == :id")
     LiveData<BudgetTrackerDto> get(int id);

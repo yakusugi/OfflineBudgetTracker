@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.offlinebudgettracker.adapter.RecycleViewAdapter;
 import com.example.offlinebudgettracker.adapter.StoreQueryRecycleViewAdapter;
@@ -45,12 +46,20 @@ public class StoreNameQuery extends AppCompatActivity {
         enterStoreNameQuery = findViewById(R.id.storeNameQueryEntry);
 
         budgetTrackerViewModel = new ViewModelProvider.AndroidViewModelFactory(StoreNameQuery.this
-        .getApplication())
-        .create(BudgetTrackerViewModel.class);
+                .getApplication())
+                .create(BudgetTrackerViewModel.class);
 
         storeNameQueryButton = findViewById(R.id.store_name_query_button);
         storeNameQueryButton.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(enterStoreNameQuery.getText())) {
+                String storeNameQuery = enterStoreNameQuery.getText().toString();
 
+                //BudgetTrackerDto budgetTrackerDto = new BudgetTrackerDto(enterStoreNameQuery.getText().toString());
+                budgetTrackerViewModel.getStoreNameBudgetTrackingContents(storeNameQuery);
+                //Log.d("TAG", "onCreate: " + storeNameQuery);
+            } else {
+                Toast.makeText(this, R.string.empty, Toast.LENGTH_SHORT).show();
+            }
         });
 
 //        budgetTrackerViewModel.get(budgetItemId).observe(this, budgetTrackerDtos -> {

@@ -31,6 +31,9 @@ public class BudgetTrackerDto {
     public BudgetTrackerDto() {
     }
 
+    public BudgetTrackerDto(String stringOne) {
+    }
+
     public BudgetTrackerDto(@NonNull String date, String storeName, String productName, String productType, int price) {
         this.id = id;
         this.date = date;
